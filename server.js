@@ -19,10 +19,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Default route -> Home page
 app.get("/", (req, res) => {
-  res.send("hello ")
   res.sendFile(path.join(__dirname, "public", "home.html"));
 });
-
 
 
 // Start server
