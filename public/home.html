@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Home - Blog Website</title>
+  <title>My Blog - Home</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Welcome to Our Blog Website</h1>
-  <a href="/create">Create Blog</a> | 
-  <a href="/blogs">View Blogs</a>
+  <h1>📚 My Blog</h1>
+  <a href="create.html">+ Create New Blog</a>
+  <div id="bloglist"></div>
+
+  <script src="script.js"></script>
+  <script>
+    loadblogs(); // Fetch blogs when page loads
+  </script>
 </body>
 </html>

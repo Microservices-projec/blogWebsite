@@ -1,16 +1,29 @@
 const express = require("express");
-const app = express();
-const routes = require("./routes/routes");
 const path = require("path");
+const cors = require("cors");
 
+const app = express();
+
+// Middlewares
 app.use(express.json());
+app.use(cors());
 
-// Routes use karo
-app.use("/", routes);
+// Import routes
+const blogRoutes = require("./routes/routes");
 
-//static file dene ke liye
+// API Routes
+app.use("/api/blogs", blogRoutes);
+
+// Serve static frontend files (html, css, js)
 app.use(express.static(path.join(__dirname, "public")));
 
+// Default route -> Home page
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "home.html"));
+});
+
+
+// Start server
 app.listen(3000, () => {
-  console.log("Server is running at http://localhost:3000");
+  console.log(`Server is running at http://localhost:3000`);
 });
