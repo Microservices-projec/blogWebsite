@@ -1,7 +1,8 @@
 const mysql= require("mysql2")
 
 const connection=mysql.createConnection({
-  host:"host.docker.internal",
+  // host:"host.docker.internal",
+  host:"localhost",
   user: "root", // apna mysql username
   password: "root", // apna mysql password
   database: "blogdb",
