@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    container_name: blog-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=blogdb
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: blog-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: blogdb
+    ports:
+      - "3306:3306"
+
+  frontend:
+    build: ./frontend
+    container_name: blog-frontend
+    ports:
+      - "5173:5173" # agar tu CRA use kar raha hai toh yaha 3000 hoga
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
