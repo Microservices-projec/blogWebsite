@@ -11,8 +11,7 @@ services:
       - DB_USER=root
       - DB_PASSWORD=root
       - DB_NAME=blogdb
-    depends_on:
-      - db
+
 
 
   frontend:
