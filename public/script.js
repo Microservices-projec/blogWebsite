@@ -10,38 +10,46 @@ async function loadblogs() {
     const bloglist = document.getElementById("bloglist");
     if (!bloglist) return;
 
-    bloglist.innerHTML = blogs
-      .map(
-        (b) => `
-        <div>
-          <h2><a href="blog.html?id=${b.id}">${b.title}</a></h2>
-          <p>${b.content.substring(0, 100)}...</p>
-        </div>`
-      )
-      .join("");
+    bloglist.innerHTML = "";
+    blogs.forEach(blog => {
+      const blogCard = `
+        <div class="blog-card">
+          <h3><a href="blog.html?id=${blog.id}">${blog.title}</a></h3>
+          <p>${(blog.content || "").substring(0, 100)}</p>
+          <a href="blog.html?id=${blog.id}">Read More</a>
+        </div>
+      `;
+      bloglist.innerHTML += blogCard;
+    });
   } catch (err) {
-    console.error(err);
+    console.error("Error loading blogs:", err);
   }
 }
+
 
 // load single blog
-async function loadsingleblog() {
-  try {
-    const param = new URLSearchParams(window.location.search);
-    const id = param.get("id");
+    async function loadsingleblog() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
 
-    const res = await fetch(`${api_url}/${id}`);
-    if (!res.ok) throw new Error("Failed to fetch blog");
-    const blog = await res.json();
+      if (!id) {
+        document.body.innerHTML = "<h2>No blog selected</h2>";
+        return;
+      }
 
-    document.getElementById("blogtitle").innerText = blog.title;
-    document.getElementById("blogcontent").innerText = blog.content;
+      try {
+        const res = await fetch(`http://localhost:3000/api/blogs/${id}`);
+        if (!res.ok) throw new Error("Failed to fetch blog");
+        const data = await res.json();
 
-    window.blogID = id; // save globally for delete/edit
-  } catch (err) {
-    console.error(err);
-  }
-}
+        document.getElementById("blogtitle").textContent = data.title;
+        document.getElementById("blogcontent").textContent = data.content;
+        window.blogID = id;
+      } catch (err) {
+        console.error("Error:", err);
+        document.body.innerHTML = "<h2>Blog not found</h2>";
+      }
+    }
 
 // create blog
 async function createblog(event) {
@@ -57,21 +65,27 @@ async function createblog(event) {
     });
 
     if (!res.ok) throw new Error("Failed to create blog");
-    window.location.href = "home.html";
+    window.location.href = "blogs.html";
   } catch (err) {
     console.error(err);
   }
 }
 
 // delete blog
-async function deleteblog() {
-  try {
-    await fetch(`${api_url}/${window.blogID}`, { method: "DELETE" });
-    window.location.href = "home.html";
-  } catch (err) {
-    console.error(err);
-  }
-}
+    async function deleteblog() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+
+      if (confirm("Are you sure you want to delete this blog?")) {
+        try {
+          await fetch(`http://localhost:3000/api/blogs/${id}`, { method: "DELETE" });
+          alert("Blog deleted!");
+          window.location.href = "blogs.html";
+        } catch (err) {
+          console.error("Error deleting blog:", err);
+        }
+      }
+    }
 
 // edit blog
 async function editblog() {
@@ -116,3 +130,56 @@ async function renderBlogs() {
         console.error("Failed to load blogs", err);
       }
     }
+
+// Following is for Footer recent post API
+async function loadRecentPosts() {
+  try {
+    let res = await fetch("http://localhost:3000/api/blogs?limit=3"); // API se last 3 posts
+    let data = await res.json();
+
+    let container = document.getElementById("recentPosts");
+    container.innerHTML = "";
+
+    data.forEach(post => {
+      let li = document.createElement("li");
+      li.innerHTML = `
+        <div class="d-flex mb-2">
+          <img src="https://picsum.photos/50?random=${post.id}" class="me-2 rounded" width="50" height="50">
+          <div>
+            <small class="text-muted"><i class="bi bi-calendar"></i> ${new Date(post.created_at).toDateString()}</small><br>
+            <a href="blog.html?id=${post.id}" class="text-decoration-none fw-semibold">${post.title}</a>
+          </div>
+        </div>`;
+      container.appendChild(li);
+    });
+  } catch (err) {
+    console.error("Error loading posts", err);
+  }
+}
+loadRecentPosts();
+
+// ✅ Newsletter Form Submit
+document.getElementById("newsletterForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let email = document.getElementById("emailInput").value;
+  let msgBox = document.getElementById("newsletterMsg");
+
+  try {
+    let res = await fetch("http://localhost:3000/api/newsletter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    if (res.ok) {
+      msgBox.textContent = "✅ Subscribed successfully!";
+      msgBox.className = "text-success";
+    } else {
+      msgBox.textContent = "❌ Failed to subscribe!";
+      msgBox.className = "text-danger";
+    }
+  } catch (err) {
+    msgBox.textContent = "⚠ Error connecting to server!";
+    msgBox.className = "text-warning";
+  }
+});
