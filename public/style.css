@@ -1,0 +1,45 @@
+/* MacBook style font */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;  /* poora screen cover kare */
+}
+
+/* Main content ko expand karne ke liye */
+main {
+  flex: 1;
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+}
+.blog-card {
+  border-bottom: 1px solid #e6e6e6;
+  padding: 20px 0;
+}
+.blog-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #222;
+}
+.blog-desc {
+  color: #555;
+}
+.blog-meta {
+  font-size: 0.9rem;
+  color: gray;
+}
+.blog-img {
+  max-width: 160px;
+  border-radius: 8px;
+}
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  background: #f1f1f1;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
+}

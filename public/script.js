@@ -15,7 +15,7 @@ async function loadblogs() {
       const blogCard = `
         <div class="blog-card">
           <h3><a href="blog.html?id=${blog.id}">${blog.title}</a></h3>
-          <p>${(blog.content || "").substring(0, 100)}...</p>
+          <p>${(blog.content || "").substring(0, 100)}</p>
           <a href="blog.html?id=${blog.id}">Read More</a>
         </div>
       `;
@@ -130,3 +130,56 @@ async function renderBlogs() {
         console.error("Failed to load blogs", err);
       }
     }
+
+// Following is for Footer recent post API
+async function loadRecentPosts() {
+  try {
+    let res = await fetch("http://localhost:3000/api/blogs?limit=3"); // API se last 3 posts
+    let data = await res.json();
+
+    let container = document.getElementById("recentPosts");
+    container.innerHTML = "";
+
+    data.forEach(post => {
+      let li = document.createElement("li");
+      li.innerHTML = `
+        <div class="d-flex mb-2">
+          <img src="https://picsum.photos/50?random=${post.id}" class="me-2 rounded" width="50" height="50">
+          <div>
+            <small class="text-muted"><i class="bi bi-calendar"></i> ${new Date(post.created_at).toDateString()}</small><br>
+            <a href="blog.html?id=${post.id}" class="text-decoration-none fw-semibold">${post.title}</a>
+          </div>
+        </div>`;
+      container.appendChild(li);
+    });
+  } catch (err) {
+    console.error("Error loading posts", err);
+  }
+}
+loadRecentPosts();
+
+// ✅ Newsletter Form Submit
+document.getElementById("newsletterForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let email = document.getElementById("emailInput").value;
+  let msgBox = document.getElementById("newsletterMsg");
+
+  try {
+    let res = await fetch("http://localhost:3000/api/newsletter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    if (res.ok) {
+      msgBox.textContent = "✅ Subscribed successfully!";
+      msgBox.className = "text-success";
+    } else {
+      msgBox.textContent = "❌ Failed to subscribe!";
+      msgBox.className = "text-danger";
+    }
+  } catch (err) {
+    msgBox.textContent = "⚠ Error connecting to server!";
+    msgBox.className = "text-warning";
+  }
+});
