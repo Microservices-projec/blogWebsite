@@ -93,3 +93,26 @@ async function editblog() {
     console.error(err);
   }
 }
+
+// get blog page, show all blogs.
+async function renderBlogs() {
+      try {
+        const res = await fetch("http://localhost:3000/api/blogs");
+        const blogs = await res.json();
+
+        const bloglist = document.getElementById("bloglist");
+        bloglist.innerHTML = blogs.map(b => `
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+              <div class="card-body">
+                <h5 class="card-title fw-bold">${b.title}</h5>
+                <p class="card-text">${b.content.substring(0, 100)}...</p>
+                <a href="blog.html?id=${b.id}" class="btn btn-primary">Read More</a>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      } catch (err) {
+        console.error("Failed to load blogs", err);
+      }
+    }
