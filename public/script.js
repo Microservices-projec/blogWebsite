@@ -38,7 +38,7 @@ async function loadblogs() {
       }
 
       try {
-        const res = await fetch(`http://localhost:3000/api/blogs/${id}`);
+        const res = await fetch(`${api_url}/${id}`);
         if (!res.ok) throw new Error("Failed to fetch blog");
         const data = await res.json();
 
@@ -78,7 +78,7 @@ async function createblog(event) {
 
       if (confirm("Are you sure you want to delete this blog?")) {
         try {
-          await fetch(`http://localhost:3000/api/blogs/${id}`, { method: "DELETE" });
+          await fetch(`${api_url}/${id}`, { method: "DELETE" });
           alert("Blog deleted!");
           window.location.href = "blogs.html";
         } catch (err) {
@@ -111,7 +111,7 @@ async function editblog() {
 // get blog page, show all blogs.
 async function renderBlogs() {
       try {
-        const res = await fetch("http://localhost:3000/api/blogs");
+        const res = await fetch(`${api_url}`);
         const blogs = await res.json();
 
         const bloglist = document.getElementById("bloglist");
@@ -134,7 +134,7 @@ async function renderBlogs() {
 // Following is for Footer recent post API
 async function loadRecentPosts() {
   try {
-    let res = await fetch("http://localhost:3000/api/blogs?limit=3"); // API se last 3 posts
+    let res = await fetch(`${api_url}?limit=3`); // API se last 3 posts
     let data = await res.json();
 
     let container = document.getElementById("recentPosts");
@@ -158,7 +158,7 @@ async function loadRecentPosts() {
 }
 loadRecentPosts();
 
-// ✅ Newsletter Form Submit
+// Newsletter Form Submit
 document.getElementById("newsletterForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   let email = document.getElementById("emailInput").value;
@@ -172,10 +172,10 @@ document.getElementById("newsletterForm").addEventListener("submit", async (e) =
     });
 
     if (res.ok) {
-      msgBox.textContent = "✅ Subscribed successfully!";
+      msgBox.textContent = "Subscribed successfully!";
       msgBox.className = "text-success";
     } else {
-      msgBox.textContent = "❌ Failed to subscribe!";
+      msgBox.textContent = "Failed to subscribe!";
       msgBox.className = "text-danger";
     }
   } catch (err) {
