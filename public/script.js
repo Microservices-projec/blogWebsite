@@ -16,6 +16,7 @@ async function loadblogs() {
         <div class="blog-card">
           <h3><a href="blog.html?id=${blog.id}">${blog.title}</a></h3>
           <p>${(blog.content || "").substring(0, 100)}</p>
+          ${blog.displayName ? `<small class="text-muted">By ${blog.displayName}</small>` : ''}
           <a href="blog.html?id=${blog.id}">Read More</a>
         </div>
       `;
@@ -28,32 +29,82 @@ async function loadblogs() {
 
 
 // load single blog
-    async function loadsingleblog() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
+// load single blog - UPDATED
+async function loadsingleblog() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-      if (!id) {
-        document.body.innerHTML = "<h2>No blog selected</h2>";
-        return;
-      }
+  if (!id) {
+    document.body.innerHTML = "<h2>No blog selected</h2>";
+    return;
+  }
 
-      try {
-        const res = await fetch(`${api_url}/${id}`);
-        if (!res.ok) throw new Error("Failed to fetch blog");
-        const data = await res.json();
+  try {
+    const res = await fetch(`${api_url}/${id}`);
+    if (!res.ok) throw new Error("Failed to fetch blog");
+    const data = await res.json();
 
-        document.getElementById("blogtitle").textContent = data.title;
-        document.getElementById("blogcontent").textContent = data.content;
-        window.blogID = id;
-      } catch (err) {
-        console.error("Error:", err);
-        document.body.innerHTML = "<h2>Blog not found</h2>";
+    document.getElementById("blogtitle").textContent = data.title;
+    document.getElementById("blogcontent").textContent = data.content;
+    window.blogID = id;
+
+    // Display author information if available
+    if (data.displayName) {
+      const authorNameElement = document.getElementById("author-name");
+      if (authorNameElement) {
+        authorNameElement.textContent = `By ${data.displayName}`;
+        authorNameElement.style.display = "block";
       }
     }
+
+    if (data.avatar) {
+      const authorAvatarElement = document.getElementById("author-avatar");
+      if (authorAvatarElement) {
+        authorAvatarElement.src = data.avatar;
+        authorAvatarElement.style.display = "block";
+      }
+    }
+
+    if (data.created_at) {
+      const blogDateElement = document.getElementById("blog-date");
+      if (blogDateElement) {
+        blogDateElement.textContent = new Date(data.created_at).toLocaleDateString();
+        blogDateElement.style.display = "block";
+      }
+    }
+
+    // Check if current user is the blog owner and show action buttons
+    if (data.user_id) {
+      checkBlogOwnership(data.user_id);
+    }
+
+  } catch (err) {
+    console.error("Error:", err);
+    document.getElementById("blogtitle").textContent = "Blog not found";
+    document.getElementById("blogcontent").textContent = "The requested blog could not be found.";
+  }
+}
 
 // create blog
 async function createblog(event) {
   event.preventDefault();
+  
+  // Check if user is logged in
+  try {
+    const userResponse = await fetch('/api/user');
+    const userData = await userResponse.json();
+    
+    if (!userData.user) {
+      alert('Please login to create a blog');
+      window.location.href = '/auth/google';
+      return;
+    }
+  } catch (error) {
+    console.error('Error checking user authentication:', error);
+    alert('Error checking authentication status');
+    return;
+  }
+
   try {
     const title = document.getElementById("title").value;
     const content = document.getElementById("content").value;
@@ -72,23 +123,55 @@ async function createblog(event) {
 }
 
 // delete blog
-    async function deleteblog() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-
-      if (confirm("Are you sure you want to delete this blog?")) {
-        try {
-          await fetch(`${api_url}/${id}`, { method: "DELETE" });
-          alert("Blog deleted!");
-          window.location.href = "blogs.html";
-        } catch (err) {
-          console.error("Error deleting blog:", err);
-        }
-      }
+async function deleteblog() {
+  // Check if user is logged in
+  try {
+    const userResponse = await fetch('/api/user');
+    const userData = await userResponse.json();
+    
+    if (!userData.user) {
+      alert('Please login to delete a blog');
+      window.location.href = '/auth/google';
+      return;
     }
+  } catch (error) {
+    console.error('Error checking user authentication:', error);
+    alert('Error checking authentication status');
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if (confirm("Are you sure you want to delete this blog?")) {
+    try {
+      await fetch(`${api_url}/${id}`, { method: "DELETE" });
+      alert("Blog deleted!");
+      window.location.href = "blogs.html";
+    } catch (err) {
+      console.error("Error deleting blog:", err);
+    }
+  }
+}
 
 // edit blog
 async function editblog() {
+  // Check if user is logged in
+  try {
+    const userResponse = await fetch('/api/user');
+    const userData = await userResponse.json();
+    
+    if (!userData.user) {
+      alert('Please login to edit a blog');
+      window.location.href = '/auth/google';
+      return;
+    }
+  } catch (error) {
+    console.error('Error checking user authentication:', error);
+    alert('Error checking authentication status');
+    return;
+  }
+
   try {
     const newtitle = prompt("New Title:");
     const newcontent = prompt("New Content:");
@@ -110,26 +193,44 @@ async function editblog() {
 
 // get blog page, show all blogs.
 async function renderBlogs() {
-      try {
-        const res = await fetch(`${api_url}`);
-        const blogs = await res.json();
+  try {
+    const res = await fetch(`${api_url}`);
+    const blogs = await res.json();
 
-        const bloglist = document.getElementById("bloglist");
-        bloglist.innerHTML = blogs.map(b => `
-          <div class="col-md-6 col-lg-4">
-            <div class="card h-100 shadow-sm border-0">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">${b.title}</h5>
-                <p class="card-text">${b.content.substring(0, 100)}...</p>
-                <a href="blog.html?id=${b.id}" class="btn btn-primary">Read More</a>
-              </div>
-            </div>
+    const bloglist = document.getElementById("bloglist");
+    bloglist.innerHTML = blogs.map(b => `
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-bold">${b.title}</h5>
+            <p class="card-text">${b.content.substring(0, 100)}...</p>
+            ${b.displayName ? `<small class="text-muted d-block mb-2">By ${b.displayName}</small>` : ''}
+            <a href="blog.html?id=${b.id}" class="btn btn-primary">Read More</a>
           </div>
-        `).join("");
-      } catch (err) {
-        console.error("Failed to load blogs", err);
+        </div>
+      </div>
+    `).join("");
+  } catch (err) {
+    console.error("Failed to load blogs", err);
+  }
+}
+
+// Check if current user is the blog owner
+async function checkBlogOwnership(blogAuthorId) {
+  try {
+    const response = await fetch('/api/user');
+    const data = await response.json();
+    
+    if (data.user && data.user.id === blogAuthorId) {
+      const actionButtons = document.getElementById('action-buttons');
+      if (actionButtons) {
+        actionButtons.style.display = 'block';
       }
     }
+  } catch (error) {
+    console.error('Error checking blog ownership:', error);
+  }
+}
 
 // Following is for Footer recent post API
 async function loadRecentPosts() {
@@ -183,3 +284,16 @@ document.getElementById("newsletterForm").addEventListener("submit", async (e) =
     msgBox.className = "text-warning";
   }
 });
+
+// Additional function to check authentication status
+async function checkAuthStatus() {
+  try {
+    const response = await fetch('/api/user');
+    const data = await response.json();
+    
+    return data.user;
+  } catch (error) {
+    console.error('Error checking auth status:', error);
+    return null;
+  }
+}

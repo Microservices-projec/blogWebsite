@@ -4,34 +4,46 @@
   <meta charset="UTF-8">
   <title>Blog Details</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-light">
 
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand" href="home.html">My Blog</a>
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="home.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="create.html">Create Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="blogs.html" > See Blogs</a>
-        </li>
-      </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="home.html">My Blog</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="home.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="create.html">Create Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="blogs.html">See Blogs</a>
+          </li>
+        </ul>
+        
+        <!-- Google OAuth Login/Logout Section -->
+        <div class="d-flex align-items-center me-3">
+          <div id="user-info" style="display: none;">
+            <span class="navbar-text me-2" id="user-name"></span>
+            <img id="user-avatar" height="30" width="30" class="rounded-circle me-2">
+            <a class="btn btn-outline-danger btn-sm" href="/logout">Logout</a>
+          </div>
+          <a class="btn btn-primary btn-sm" href="/auth/google" id="login-btn">Login with Google</a>
+        </div>
+        
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
   <!-- Hero Section -->
   <header class="bg-primary bg-gradient text-white text-center py-3 shadow">
@@ -41,73 +53,117 @@
     </div>
   </header>
 
-
   <div class="container my-5">
     <a href="blogs.html" class="btn btn-outline-secondary mb-3">⬅ Back to Blogs</a>
 
     <div class="card shadow-lg p-4">
       <h1 id="blogtitle" class="mb-3 text-primary">Loading...</h1>
+      
+      <!-- Author Information Section -->
+      <div class="d-flex align-items-center mb-3">
+        <img id="author-avatar" src="" class="rounded-circle me-2" width="40" height="40" style="display: none;">
+        <div>
+          <span id="author-name" class="text-muted"></span>
+          <br>
+          <small id="blog-date" class="text-muted"></small>
+        </div>
+      </div>
+      
       <p id="blogcontent" class="fs-5 text-dark"></p>
 
-      <div class="mt-4">
+      <!-- Action Buttons (only show for blog owner) -->
+      <div class="mt-4" id="action-buttons" style="display: none;">
         <button class="btn btn-danger me-2" onclick="deleteblog()">Delete Blog</button>
         <button class="btn btn-primary" onclick="editblog()">Edit Blog</button>
       </div>
     </div>
   </div>
 
-  
-<!-- Footer Section -->
-<footer class="bg-light mt-5 pt-5 border-top">
-  <div class="container">
+  <!-- Footer Section -->
+  <footer class="bg-light mt-5 pt-5 border-top">
+    <div class="container">
+      <!-- Newsletter -->
+      <div class="row mb-5 text-center">
+        <div class="col">
+          <h4 class="fw-bold">Newsletter - Stay tuned and get the latest updates</h4>
+          <p class="text-muted">Far far away, behind the word Tech</p>
+          <form id="newsletterForm" class="d-flex justify-content-center">
+            <input type="email" id="emailInput" class="form-control w-50 me-2" placeholder="Enter email address" required>
+            <button type="submit" class="bg-primary bg-gradient btn btn-dark">Subscribe</button>
+          </form>
+          <small id="newsletterMsg" class="d-block mt-2"></small>
+        </div>
+      </div>
 
-    <!-- Newsletter -->
-    <div class="row mb-5 text-center">
-      <div class="col">
-        <h4 class="fw-bold">Newsletter - Stay tuned and get the latest updates</h4>
-        <p class="text-muted">Far far away, behind the word Tech</p>
-        <form id="newsletterForm" class="d-flex justify-content-center">
-          <input type="email" id="emailInput" class="form-control w-50 me-2" placeholder="Enter email address" required>
-          <button type="submit" class="bg-primary bg-gradient btn btn-dark">Subscribe</button>
-        </form>
-        <small id="newsletterMsg" class="d-block mt-2"></small>
+      <!-- Footer Widgets -->
+      <div class="row text-start">
+        <!-- About -->
+        <div class="col-md-4 mb-5">
+          <h5 class="text-primary fw-bold">MyBlog</h5>
+          <p class="text-muted">My personal Issue and Learning will share here, </br> having Blog about Cyber Security and Development</p>
+        </div>
+
+        <!-- Recent Posts -->
+        <div class="col-md-4 mb-5">
+          <h6 class="text-primary fw-bold">Recent Posts</h6>
+          <ul class="list-unstyled" id="recentPosts"></ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-4 mb-5">
+          <h6 class="text-primary fw-bold">Have Questions?</h6>
+          <p><i class="bi bi-envelope-fill me-2"></i>tanishdewase222@gmail.com</p>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="text-center py-3 border-top mt-3">
+        <small>© 2025 My Blog | Built by Tanish Dewase</small>
       </div>
     </div>
-
-    <!-- Footer Widgets -->
-    <div class="row text-start">
-
-      <!-- About -->
-      <div class="col-md-4 mb-5">
-        <h5 class="text-primary fw-bold">MyBlog</h5>
-        <p class="text-muted">My personal Issue and Learning will share here, </br> having Blog about Cyber Security and Development</p>
-      </div>
-
-
-      <!-- Recent Posts -->
-      <div class="col-md-4 mb-5">
-        <h6 class="text-primary fw-bold">Recent Posts</h6>
-        <ul class="list-unstyled" id="recentPosts"></ul>
-      </div>
-
-      <!-- Contact -->
-      <div class="col-md-4 mb-5">
-        <h6 class="text-primary fw-bold">Have Questions?</h6>
-        <p><i class="bi bi-envelope-fill me-2"></i>tanishdewase222@gmail.com</p>
-      </div>
-    </div>
-
-    <!-- Copyright -->
-    <div class="text-center py-3 border-top mt-3">
-      <small>© 2025 My Blog | Built by Tanish Dewase</small>
-    </div>
-  </div>
-</footer>
+  </footer>
 
   <script src="script.js"></script>
-  <script>
-    loadsingleblog();
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Check if user is logged in and update UI accordingly
+    fetch('/api/user')
+      .then(response => response.json())
+      .then(data => {
+        if (data.user) {
+          // User is logged in - show user info and hide login button
+          document.getElementById('login-btn').style.display = 'none';
+          document.getElementById('user-info').style.display = 'flex';
+          document.getElementById('user-name').textContent = data.user.displayName;
+          document.getElementById('user-avatar').src = data.user.avatar;
+        } else {
+          // User is not logged in - show login button and hide user info
+          document.getElementById('login-btn').style.display = 'block';
+          document.getElementById('user-info').style.display = 'none';
+        }
+      })
+      .catch(error => {
+        console.error('Error checking auth status:', error);
+      });
+
+    // Load single blog
+    loadsingleblog();
+    
+    // Function to check if current user is the blog owner
+    async function checkBlogOwnership(blogAuthorId) {
+      try {
+        const response = await fetch('/api/user');
+        const data = await response.json();
+        
+        if (data.user && data.user.id === blogAuthorId) {
+          // Current user is the blog owner - show action buttons
+          document.getElementById('action-buttons').style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error checking blog ownership:', error);
+      }
+    }
+  </script>
 </body>
 </html>
