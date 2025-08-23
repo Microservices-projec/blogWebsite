@@ -44,9 +44,6 @@ router.post('/api/blogs', authMiddleware.isAuthenticated, (req, res) => {
     ...req.body,
     user_id: req.user.id
   };
-    
-  // Save to database
-  // Your existing code here
 });
 
 module.exports = router;
