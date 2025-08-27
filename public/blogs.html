@@ -1,145 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>All Blogs</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>See Blogs - My Blog</title>
+  <meta name="description" content="Browse blogs on technology, cybersecurity, and development">
+  
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .navbar-brand {
+      font-weight: 700;
+    }
+    .hero-section {
+      background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    }
+    .blog-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+    .blog-card:hover {
+      transform: translateY(-5px);
+    }
+    .blog-meta {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+    .footer {
+      background-color: #f8f9fa;
+    }
+  </style>
 </head>
 <body class="bg-light">
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand" href="home.html">My Blog</a>
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="home.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="create.html">Create Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="blogs.html">See Blogs</a>
-        </li>
-      </ul>
-      
-      <!-- Google OAuth Login/Logout Section -->
-      <div class="d-flex align-items-center me-3">
-        <div id="user-info" style="display: none;">
-          <span class="navbar-text me-2" id="user-name"></span>
-          <img id="user-avatar" height="30" width="30" class="rounded-circle me-2">
-          <a class="btn btn-outline-danger btn-sm" href="/logout">Logout</a>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-2">
+    <div class="container">
+      <a class="navbar-brand text-primary" href="home.html">
+        <i class="bi bi-pencil-square me-2"></i>My Blog
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarContent" aria-controls="navbarContent" 
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="home.html"><i class="bi bi-house-door me-1"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="create.html"><i class="bi bi-plus-circle me-1"></i>Create Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="blogs.html"><i class="bi bi-journal-text me-1"></i>See Blogs</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center ms-auto">
+          <!-- Google OAuth Section -->
+          <div class="d-flex align-items-center">
+            <div id="user-info" class="d-none align-items-center me-3">
+              <img id="user-avatar" height="32" width="32" class="rounded-circle me-2">
+              <span class="navbar-text me-2" id="user-name"></span>
+              <a class="btn btn-outline-danger btn-sm" href="/logout">Logout</a>
+            </div>
+            <a class="btn btn-primary btn-sm" href="/auth/google" id="login-btn">
+              <i class="bi bi-google me-1"></i>Login with Google
+            </a>
+          </div>
+
+          <!-- Search Form -->
+          <form class="d-flex ms-3" role="search">
+            <div class="input-group">
+              <input class="form-control" type="search" placeholder="Search posts..." aria-label="Search">
+              <button class="btn btn-outline-primary" type="submit">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </form>
         </div>
-        <a class="btn btn-primary btn-sm" href="/auth/google" id="login-btn">Login with Google</a>
       </div>
-      
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
     </div>
-  </div>
-</nav>
+  </nav>
 
   <!-- Hero Section -->
-  <header class="bg-primary bg-gradient text-white text-center py-3 shadow">
-    <div class="container">
-      <h1 class="display-3">See Blogs</h1>
-      <p class="lead">Read, Think, and Share your thoughts</p>
+  <header class="hero-section text-white py-4 shadow">
+    <div class="container py-3 text-center">
+      <h1 class="display-5 fw-bold mb-2">Explore Blogs</h1>
+      <p class="lead mb-0">Read, think, and share your insights with the community</p>
     </div>
   </header>
 
-  <!-- All Blogs Section -->
-  <div class="container my-5">
-    <h1 class="text-center mb-4 fw-bold">All Blogs</h1>
-    <div id="bloglist" class="row g-4">
-      <!-- Blogs will be injected here dynamically -->
-    </div>
-  </div>
-
-<!-- Footer Section -->
-<footer class="bg-light mt-5 pt-5 border-top">
-  <div class="container">
-
-    <!-- Newsletter -->
-    <div class="row mb-5 text-center">
-      <div class="col">
-        <h4 class="fw-bold">Newsletter - Stay tuned and get the latest updates</h4>
-        <p class="text-muted">Far far away, behind the word Tech</p>
-        <form id="newsletterForm" class="d-flex justify-content-center">
-          <input type="email" id="emailInput" class="form-control w-50 me-2" placeholder="Enter email address" required>
-          <button type="submit" class="bg-primary bg-gradient btn btn-dark">Subscribe</button>
-        </form>
-        <small id="newsletterMsg" class="d-block mt-2"></small>
+  <!-- Blogs Section -->
+  <main class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-9">
+        <h2 class="text-center fw-bold mb-4">All Blogs</h2>
+        <div id="bloglist" class="row g-4">
+          <!-- Blogs injected dynamically -->
+        </div>
       </div>
     </div>
+  </main>
 
-    <!-- Footer Widgets -->
-    <div class="row text-start">
-
-      <!-- About -->
-      <div class="col-md-4 mb-5">
-        <h5 class="text-primary fw-bold">MyBlog</h5>
-        <p class="text-muted">My personal Issue and Learning will share here, </br> having Blog about Cyber Security and Development</p>
+  <!-- Footer -->
+  <footer class="footer mt-5 pt-5 border-top">
+    <div class="container">
+      <!-- Newsletter -->
+      <div class="row mb-5 text-center">
+        <div class="col">
+          <h4 class="fw-bold mb-3">Stay Updated With Our Newsletter</h4>
+          <p class="text-muted mb-4">Receive the latest articles and updates directly to your inbox</p>
+          <form id="newsletterForm" class="row g-2 justify-content-center">
+            <div class="col-sm-8">
+              <input type="email" id="emailInput" class="form-control" placeholder="Enter your email address" required>
+            </div>
+            <div class="col-sm-4">
+              <button type="submit" class="btn btn-primary w-100">Subscribe</button>
+            </div>
+          </form>
+          <small id="newsletterMsg" class="d-block mt-3"></small>
+        </div>
       </div>
 
-      <!-- Recent Posts -->
-      <div class="col-md-4 mb-5">
-        <h6 class="text-primary fw-bold">Recent Posts</h6>
-        <ul class="list-unstyled" id="recentPosts"></ul>
+      <!-- Footer Widgets -->
+      <div class="row text-start g-4">
+        <!-- About -->
+        <div class="col-md-4">
+          <h5 class="text-primary fw-bold mb-3">MyBlog</h5>
+          <p class="text-muted">Sharing knowledge and experiences about cybersecurity, development, and technology trends. My personal insights and learnings will be shared here.</p>
+        </div>
+
+        <!-- Recent Posts -->
+        <div class="col-md-4">
+          <h6 class="text-primary fw-bold mb-3">Recent Posts</h6>
+          <ul class="list-unstyled" id="recentPosts">
+            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Loading recent posts...</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-4">
+          <h6 class="text-primary fw-bold mb-3">Have Questions?</h6>
+          <p class="text-muted mb-2"><i class="bi bi-envelope me-2"></i>tanishdewase222@gmail.com</p>
+          <p class="text-muted mb-0"><i class="bi bi-geo-alt me-2"></i>Pune, India</p>
+        </div>
       </div>
 
-      <!-- Contact -->
-      <div class="col-md-4 mb-5">
-        <h6 class="text-primary fw-bold">Have Questions?</h6>
-        <p><i class="bi bi-envelope-fill me-2"></i>tanishdewase222@gmail.com</p>
+      <!-- Copyright -->
+      <div class="text-center py-4 mt-4 border-top">
+        <small class="text-muted">© 2025 My Blog | Built by Tanish Dewase</small>
       </div>
     </div>
-
-    <!-- Copyright -->
-    <div class="text-center py-3 border-top mt-3">
-      <small>© 2025 My Blog | Built by Tanish Dewase</small>
-    </div>
-  </div>
-</footer>
+  </footer>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Script -->
   <script src="script.js"></script>
-  
+
   <script>
-    // Check if user is logged in and update UI accordingly
+    // Check auth status
     fetch('/api/user')
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
         if (data.user) {
-          // User is logged in - show user info and hide login button
-          document.getElementById('login-btn').style.display = 'none';
-          document.getElementById('user-info').style.display = 'flex';
+          document.getElementById('login-btn').classList.add('d-none');
+          document.getElementById('user-info').classList.remove('d-none');
           document.getElementById('user-name').textContent = data.user.displayName;
           document.getElementById('user-avatar').src = data.user.avatar;
-          
-          // Show create blog link only to logged in users
-          const createLink = document.querySelector('a[href="create.html"]');
-          if (createLink) {
-            createLink.style.display = 'block';
-          }
         } else {
-          // User is not logged in - show login button and hide user info
-          document.getElementById('login-btn').style.display = 'block';
-          document.getElementById('user-info').style.display = 'none';
+          document.getElementById('login-btn').classList.remove('d-none');
+          document.getElementById('user-info').classList.add('d-none');
         }
       })
-      .catch(error => {
-        console.error('Error checking auth status:', error);
-      });
+      .catch(err => console.error('Auth check failed:', err));
 
-    // Load blogs when page loads
+    // Load blogs
     renderBlogs();
     loadblogs();
   </script>

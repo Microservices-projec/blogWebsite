@@ -21,9 +21,9 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !proce
 
 // Session middleware - sirf ek baar use karein
 app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
+  secret: process.env.SESSION_SECRET,  // session secret 
+  resave: false,      // save session
+  saveUninitialized: false,  // empty session will not save
   cookie: { secure: false } // development ke liye false rakhein
 }));
 
@@ -84,7 +84,7 @@ app.get('/api/user', (req, res) => {
   res.json({ user: req.user || null });
 });
 
-// routes serve
+// routes serve for CRUD blog
 const blogRoutes = require("./routes/routes");
 app.use("/api/blogs", blogRoutes);
 

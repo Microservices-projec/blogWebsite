@@ -10,7 +10,7 @@ router.post("/", blogController.createblog);
 router.put("/:id", blogController.updateblog);
 router.delete("/:id", blogController.deleteblog);
 
-// Auth Routes
+// Auth Routes 
 router.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
