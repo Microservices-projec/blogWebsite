@@ -17,19 +17,19 @@
       <a class="navbar-brand" href="home.html">My Blog</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+          <a class="nav-link" href="home.html">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="create.html">Create Blog</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="blogs.html">See Blogs</a>
+          <a class="nav-link active" aria-current="page" href="blogs.html">See Blogs</a>
         </li>
       </ul>
       
       <!-- Google OAuth Login/Logout Section -->
-      <div class="d-flex align-items-center">
-        <div id="user-info" style="display: none;" class="me-3">
+      <div class="d-flex align-items-center me-3">
+        <div id="user-info" style="display: none;">
           <span class="navbar-text me-2" id="user-name"></span>
           <img id="user-avatar" height="30" width="30" class="rounded-circle me-2">
           <a class="btn btn-outline-danger btn-sm" href="/logout">Logout</a>
@@ -37,7 +37,7 @@
         <a class="btn btn-primary btn-sm" href="/auth/google" id="login-btn">Login with Google</a>
       </div>
       
-      <form class="d-flex ms-2" role="search">
+      <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
