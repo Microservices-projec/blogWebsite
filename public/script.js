@@ -238,6 +238,8 @@ async function loadRecentPosts() {
     let res = await fetch(`${api_url}?limit=3`); // API se last 3 posts
     let data = await res.json();
 
+    data = data.reverse().slice(0, 3);
+
     let container = document.getElementById("recentPosts");
     container.innerHTML = "";
 
@@ -259,31 +261,31 @@ async function loadRecentPosts() {
 }
 loadRecentPosts();
 
-// Newsletter Form Submit
-document.getElementById("newsletterForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  let email = document.getElementById("emailInput").value;
-  let msgBox = document.getElementById("newsletterMsg");
+// // Newsletter Form Submit
+// document.getElementById("newsletterForm").addEventListener("submit", async (e) => {
+//   e.preventDefault();
+//   let email = document.getElementById("emailInput").value;
+//   let msgBox = document.getElementById("newsletterMsg");
 
-  try {
-    let res = await fetch("http://localhost:3000/api/newsletter", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
-    });
+//   try {
+//     let res = await fetch("http://localhost:3000/api/newsletter", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ email })
+//     });
 
-    if (res.ok) {
-      msgBox.textContent = "Subscribed successfully!";
-      msgBox.className = "text-success";
-    } else {
-      msgBox.textContent = "Failed to subscribe!";
-      msgBox.className = "text-danger";
-    }
-  } catch (err) {
-    msgBox.textContent = "⚠ Error connecting to server!";
-    msgBox.className = "text-warning";
-  }
-});
+//     if (res.ok) {
+//       msgBox.textContent = "Subscribed successfully!";
+//       msgBox.className = "text-success";
+//     } else {
+//       msgBox.textContent = "Failed to subscribe!";
+//       msgBox.className = "text-danger";
+//     }
+//   } catch (err) {
+//     msgBox.textContent = "⚠ Error connecting to server!";
+//     msgBox.className = "text-warning";
+//   }
+// });
 
 // Additional function to check authentication status
 async function checkAuthStatus() {

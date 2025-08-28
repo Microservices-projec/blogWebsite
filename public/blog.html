@@ -72,7 +72,7 @@
       <p id="blogcontent" class="fs-5 text-dark"></p>
 
       <!-- Action Buttons (only show for blog owner) -->
-      <div class="mt-4" id="action-buttons" style="display: none;">
+      <div class="mt-4" id="action-buttons" style="display">
         <button class="btn btn-danger me-2" onclick="deleteblog()">Delete Blog</button>
         <button class="btn btn-primary" onclick="editblog()">Edit Blog</button>
       </div>
@@ -150,20 +150,6 @@
     // Load single blog
     loadsingleblog();
     
-    // Function to check if current user is the blog owner
-    async function checkBlogOwnership(blogAuthorId) {
-      try {
-        const response = await fetch('/api/user');
-        const data = await response.json();
-        
-        if (data.user && data.user.id === blogAuthorId) {
-          // Current user is the blog owner - show action buttons
-          document.getElementById('action-buttons').style.display = 'block';
-        }
-      } catch (error) {
-        console.error('Error checking blog ownership:', error);
-      }
-    }
   </script>
 </body>
 </html>
