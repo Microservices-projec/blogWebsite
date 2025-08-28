@@ -13,11 +13,29 @@ async function loadblogs() {
     bloglist.innerHTML = "";
     blogs.forEach(blog => {
       const blogCard = `
-        <div class="blog-card">
-          <h3><a href="blog.html?id=${blog.id}">${blog.title}</a></h3>
-          <p>${(blog.content || "").substring(0, 100)}</p>
-          ${blog.displayName ? `<small class="text-muted">By ${blog.displayName}</small>` : ''}
-          <a href="blog.html?id=${blog.id}">Read More</a>
+        <div class="card shadow-sm border-0 mb-4 blog-card">
+          <div class="card-body">
+            <!-- Blog Title -->
+            <h4 class="card-title mb-2">
+              <a href="blog.html?id=${blog.id}" class="text-dark text-decoration-none fw-bold">
+                ${blog.title}
+              </a>
+            </h4>
+        
+            <!-- Blog Excerpt -->
+            <p class="card-text text-muted">
+              ${(blog.content || "").substring(0, 100)}...
+            </p>
+            <!-- Author + Date -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div>
+                ${blog.displayName ? `<small class="text-muted">✍️ By ${blog.displayName}</small>` : ''}
+              </div>
+              <a href="blog.html?id=${blog.id}" class="btn btn-sm btn-primary rounded-pill px-3">
+                Read More →
+              </a>
+            </div>
+          </div>
         </div>
       `;
       bloglist.innerHTML += blogCard;
