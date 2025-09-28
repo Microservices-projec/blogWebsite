@@ -19,6 +19,7 @@ body {
   background-color: #f5f7f9;
   color: #333;
   line-height: 1.6;
+  padding-top: 70px; /* Adjust for fixed navbar height */
 }
 
 /* Navigation */
