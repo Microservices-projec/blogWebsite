@@ -1,5 +1,3 @@
-Bahut badiya thought bhai 👌 — abhi tera blog project ek **basic CRUD + auth** system hai. Agar tu ise **production-like** banana chahta hai, toh main tujhe kuch **real-world blog platform wali functionality** suggest karta hu.
-
 ---
 
 ## 🔑 Must-Have Functionalities (Phase 1 – Basic Upgrade)
